@@ -3,8 +3,6 @@ module.exports = {
     route: "/api/v1/ping",
     middleware: [],
     controller: (req, res) => {
-        res.json({
-            message: "pong"
-        });
+        res.send("pong")
     }
 }
