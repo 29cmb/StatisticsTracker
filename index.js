@@ -13,12 +13,19 @@ const apiFiles = fs.readdirSync(apiPath).filter(file => file.endsWith('.js'))
 
 for (const file of apiFiles) {
     const filePath = path.join(apiPath, file)
-    const data = require(filePath)(app)
+    const data = require(filePath)
 
-    if(data?.method && data.route){
-        console.log(`✅ | API route ${data.method} '${data.route}' has been setup successfully!`)
+    if(data?.method && data?.route && data?.controller) {
+        app[data.method](data.route, ...data.middleware, (...params) => {
+            try {
+                data.controller(...params)
+            } catch(err) {
+                console.log(`❌ | An error occurred while trying to execute the API route ${data.method.toUpperCase()} ${data.route}: ${err}`)
+            }
+        })
+        console.log(`✅ | API route ${data.method.toUpperCase()} ${data.route} has been loaded successfully!`)
     } else {
-        console.log(`❌ | API route '${filePath}' did not return data.method or did not return data.route.`)
+        console.log(`❌ | The API route ${file} is missing "method", "route" or "controller" properties.`)
     }
 }
 

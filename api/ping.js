@@ -1,10 +1,10 @@
-module.exports = (app) => {
-    app.get('/api/v1/ping', (req, res) => {
-        res.send('pong')
-    })
-
-    return {
-        method: "GET",
-        route: "/api/v1/ping"
+module.exports = {
+    method: "get",
+    route: "/api/v1/ping",
+    middleware: [],
+    controller: (req, res) => {
+        res.json({
+            message: "pong"
+        });
     }
 }
